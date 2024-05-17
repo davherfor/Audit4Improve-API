@@ -1,0 +1,18 @@
+name: davherfor
+
+on:
+  issues:
+    types: [opened] # Se dispara al crear un nuevo issue
+  project_card:
+    types: [moved] # Se dispara al cambiar de columna en un tablero de proyectos
+  workflow_dispatch: # Se puede ejecutar manualmente desde la sección Actions
+
+jobs:
+  davherfor_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Imprimir información del evento
+        run: |
+          echo "Evento disparador: ${{ github.event_name }}"
+          echo "Número de issue: ${{ github.event.issue.number }}"
+          echo "URL del issue: ${{ github.event.issue.html_url }}"

@@ -2,8 +2,32 @@
 	"metrics": [{
 			"name": "subscribers",
 			"type": "java.lang.Integer",
-			"description": "Número de suscriptores, watchers en la web",
+			"description": "Número de suscriptores de un repositorio, watchers en la web",
 			"unit": "subscribers"
+		},
+		{
+			"name": "collaborators",
+			"type": "java.lang.Integer",
+			"description": "Número de colaboradores de un repositorio",
+			"unit": "collaborators"
+		},
+		{
+			"name": "ownerCommits",
+			"type": "java.lang.Integer",
+			"description": "Número de commits del propietario del repositorio",
+			"unit": "commits"
+		},
+		{
+			"name": "members",
+			"type": "java.lang.Integer",
+			"description": "Miembros de una organización",
+			"unit": "members"
+		},
+		{
+			"name": "teams",
+			"type": "java.lang.Integer",
+			"description": "Equipos de una organización",
+			"unit": "teams"
 		},
 		{
 			"name": "forks",
@@ -14,14 +38,32 @@
 		{
 			"name": "watchers",
 			"type": "java.lang.Integer",
-			"description": "Observadores, en la web aparece com forks",
+			"description": "Observadores de un repositorio, en la web aparece com forks",
 			"unit": "watchers"
 		},
 		{
-			"name": "issues",
+			"name": "followers",
 			"type": "java.lang.Integer",
-			"description": "Tareas sin finalizar en el repositorio",
-			"unit": "issues"
+			"description": "Seguidores de una organización",
+			"unit": "followers"
+		},
+		{
+			"name": "totalAdditions",
+			"type": "java.lang.Integer",
+			"description": "Inserciones desde que se inició el repositorio",
+			"unit": "additions"
+		},
+		{
+			"name": "totalDeletions",
+			"type": "java.lang.Integer",
+			"description": "Eliminaciones desde que se inició el repositorio",
+			"unit": "deletions"
+		},
+		{
+			"name": "pullRequests",
+			"type": "java.lang.Integer",
+			"description": "Número de pull requests",
+			"unit": "pull requests"
 		},
 		{
 			"name": "stars",
@@ -42,29 +84,74 @@
 			"unit": "date"
 		},
 		{
+			"name": "lastUpdated",
+			"type": "java.util.Date",
+			"description": "Última actualización realizada en el repositorio",
+			"unit": "date"
+		},
+		{
 			"name": "openIssues",
-			"type": "java.lang.Double",
+			"type": "java.lang.Integer",
 			"description": "Numero de issues abiertas",
 			"unit": "issues"
 		},
 		{
 			"name": "closedIssues",
-			"type": "java.lang.Double",
-			"description": "Numero de issues cerradas",
+			"type": "java.lang.Integer",
+			"description": "Numero de issues cerrados",
 			"unit": "issues"
+		},
+		{
+			"name": "issues",
+			"type": "java.lang.Integer",
+			"description": "Tareas totales",
+			"unit": "issues"
+		},
+		{
+			"name": "openProjects",
+			"type": "java.lang.Integer",
+			"description": "Proyectos abiertos",
+			"unit": "projects"
+		},
+		{
+			"name": "closedProjects",
+			"type": "java.lang.Integer",
+			"description": "Proyectos cerrados",
+			"unit": "projects"
+		},
+		{
+			"name": "repositories",
+			"type": "java.lang.Integer",
+			"description": "Número de repositorios",
+			"unit": "repositories"
+		},
+		{
+			"name": "repositoriesWithPullRequest",
+			"type": "java.lang.Integer",
+			"description": "Número de repositorios con pull requests",
+			"unit": "repositories"
+		},
+		{
+			"name": "repositoriesWithOpenPullRequest",
+			"type": "java.lang.Integer",
+			"description": "Número de repositorios con pull requests pendientes",
+			"unit": "repositories"
 		}
+		
 	],
 	"indicators": [{
-			"name": "issuesProgess",
+			"name": "issuesProgress",
 			"type": "java.lang.Double",
 			"description": "Ratio de issues cerrados frente a totales",
-			"unit": "ratio"
+			"unit": "ratio",
+			"limits": { "ok": 2, "warning": 4, "critical": 6 }
 		},
 		{
 			"name": "overdued",
 			"type": "java.lang.Double",
 			"description": "Ratio de issues vencidos frente a abiertos",
-			"unit": "ratio"
+			"unit": "ratio",
+			"limits": { "ok": 5, "warning": 9, "critical": 12 }
 		},
 		{
 			"name": "issuesRatio",

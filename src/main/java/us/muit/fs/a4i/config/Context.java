@@ -3,8 +3,7 @@
  */
 package us.muit.fs.a4i.config;
 
-import java.awt.Font;
-import java.io.File;
+import java.awt.Color;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,6 +12,7 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import us.muit.fs.a4i.model.entities.IndicatorI;
+import us.muit.fs.a4i.model.entities.Font;
 
 /**
  * <p>
@@ -66,7 +66,7 @@ public class Context {
 	/**
 	 * Fichero de propiedades de la API establecido por la aplicación cliente
 	 */
-	private static String appConFile = null;
+	private static String appConfFile = null;
 
 	/**
 	 * Fichero de especificación de métricas e indicadores establecido por la
@@ -160,7 +160,7 @@ public class Context {
 		/**
 		 * Vuelve a leer las propiedades incluyendo las establecidas por la aplicación
 		 */
-		appConFile = appConPath;
+		appConfFile = appConPath;
 
 		// customFile=System.getenv("APP_HOME")+customFile;
 		// Otra opción, Usar una variable de entorno para localizar la ruta de
@@ -168,6 +168,10 @@ public class Context {
 		// También podría localizarse en el home de usuario
 		getContext().properties.load(new FileInputStream(appConPath));
 		log.info("Las nuevas propiedades son " + getContext().properties);
+	}
+	
+	public static String getAppConf() throws IOException {		
+		return appConfFile;		
 	}
 
 	/**
@@ -206,7 +210,7 @@ public class Context {
 
 	/**
 	 * <p>
-	 * No Implementado Debería leer las propiedades adecuadas, como color, tamaño,
+	 * Lee las propiedades adecuadas, como color, tamaño,
 	 * tipo... y construir un objeto Font Si no se ha establecido un valor por
 	 * defecto se crea una fuente simple
 	 * </p>
@@ -214,29 +218,49 @@ public class Context {
 	 * @return La fuente por defecto para indicadores y métricas
 	 */
 	public Font getDefaultFont() {
-		// OJO el color no forma parte de la clase font, por loq ue ese atributo debe
+		// OJO el color no forma parte de la clase font, por lo que ese atributo debe
 		// estar fuera
 		// Podría incluir un parámetro font para devolverlo a la salida y que lo que
 		// devuelva sea un String con el color
 		log.info("Busca la información de configuración de la fuente, por defecto");
 
-		// TO DO
-		String color = properties.getProperty("Font.default.color");
-		String height = properties.getProperty("Font.default.height");
-		String type = properties.getProperty("Font.default.type");
+	
+		String color  = getDefaultParam("color");
+		String height = getDefaultParam("height");
+		String type   = getDefaultParam("type");	
+
 		log.info("Los datos son, color: " + color + " height: " + height + " type: " + type);
 		log.info("Intento crear la fuente");
 
-		return new Font(type, Font.ITALIC, Integer.valueOf(height));
+		return new Font(type,Integer.valueOf(height),color);
+		
+	}
+	private String getDefaultParam(String param) {
+		String property="Font.default."+param;		
+		String value=properties.getProperty(property);
+		/**
+		 * Se asegura de que se da un valor por defecto, aunque no esté configurado en el fichero
+		 */
+		if (value==null) {
+			switch(param) {
+			case "type":
+				value="Arial";
+				break;
+			case "color":
+				value="black";
+				break;
+			case "height":
+				value="12";
+				break;
+			}
+		}
+		return value;
 	}
 
 	/**
 	 * <p>
-	 * No Implementado
-	 * </p>
-	 * <p>
-	 * Deberá leer las propiedades adecuadas, como color, tamaño, tipo... y
-	 * construir un objeto Font
+	 * Lee las propiedades adecuadas, como color, tamaño, tipo... y
+	 * construye un objeto Font para la fuente de las métricas
 	 * </p>
 	 * <p>
 	 * Si no se ha definido una fuente para las métricas se debe devolver la fuente
@@ -245,30 +269,70 @@ public class Context {
 	 * 
 	 * @return la fuente para las métricas
 	 */
-	public static Font getMetricFont() {
-		Font font = null;
-		// TO DO
-		return font;
+	public Font getMetricFont() {
+		log.info("Busca la información de configuración de la fuente, para las métricas");
+
+		String type = properties.getProperty("Font.metric.type");
+		String height = properties.getProperty("Font.metric.height");
+		String color = properties.getProperty("Font.metric.color");
+
+		if (type==null){
+			type = getDefaultParam("type");
+			log.info("El tipo de la fuente de las metricas es el valor por defecto");
+		}
+		if (height==null){
+			height =getDefaultParam("height");
+			log.info("El tamaño de la fuente de las metricas es el valor por defecto");
+		}
+		if (color==null){
+			color = getDefaultParam("color");
+			log.info("El color de la fuente de las metricas es el valor por defecto");
+		}
+
+		log.info("Llamo a newFont con los datos color: " + color + " height: " + height + " type: " + type);	
+	
+		return new Font(type, Integer.valueOf(height), color);
+
 	}
 
 	/**
 	 * <p>
-	 * No Implementado
-	 * </p>
-	 * <p>
 	 * Deberá leer las propiedades adecuadas, como color, tamaño, tipo... y
-	 * construir un objeto Font
+	 * construir un objeto Font para la fuente del indicador en dicho estado
 	 * </p>
 	 * 
 	 * @param state Estado para el que se solicita el color de fuente
-	 * @return La fuente para el indicador cuando el estado es el par�metro pasado
+	 * @return La fuente para el indicador cuando el estado es el parametro pasado
 	 * @throws IOException problema al leer el fichero
 	 */
 
-	public static Font getIndicatorFont(IndicatorI.IndicatorState state) throws IOException {
+	public Font getIndicatorFont(IndicatorI.IndicatorState state) throws IOException {
+		/**He eliminado el static, así si funciona
+		 * Hay que comprobar si el static estaba puesto con sentido desde un primer momento
+		 * **/
 		Font font = null;
-
-		// TO DO
+		// TODO:
+		String propertyState = "Font." + state.toString();
+		log.info("Raiz que uso para buscar los datos del indicador en estado "+state+" "+propertyState);
+		
+		String color  = properties.getProperty(propertyState + ".color");
+		String height = properties.getProperty(propertyState + ".height");
+		String type   = properties.getProperty(propertyState + ".type");
+		
+		log.info("Los datos son, color: " + color + " height: " + height + " type: " + type);
+		log.info("Intento crear la fuente");
+		
+		if (color == null) {
+			color  = properties.getProperty("Font.default.color");	
+		} 
+		if (height == null) {
+			height = properties.getProperty("Font.default.height");
+		}		
+		if(type == null){
+			type   = properties.getProperty("Font.default.type");	
+		}
+		
+		font = new Font(type, Integer.valueOf(height), color);
 		return font;
 	}
 

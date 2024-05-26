@@ -158,6 +158,13 @@
 			"type": "java.lang.Double",
 			"description": "Ratio de issues abiertos frente a cerrados",
 			"unit": "ratio"
+		},
+		{
+			"name": "grupo8Indicator",
+			"type": "java.lang.Double",
+			"description": "Indicador Grupo 8",
+			"unit": "indicador",
+			"limits": { "inaceptable": 25, "mediocre": 49, "aceptable": 69, "bueno": 79, "muy bueno": 89, "excelente": 100 }
 		}
 	]
 }
